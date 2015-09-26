@@ -58,11 +58,11 @@ namespace WpfApplication1
      
                 paintSurface.Children.Add(line);
 
-                if (ptSets.Last().addPoint(new QDPoint((float)line.X1, (float)line.X2)))
-                {
-                    Debug.WriteLine("Corner found");
+                //if (ptSets.Last().addPoint(new QDPoint((float)line.X1, (float)line.X2)))
+                //{
+                //    Debug.WriteLine("Corner found");
                     // Code to handle line fitting goes in here
-                }
+                //}
 
 
 
@@ -75,6 +75,18 @@ namespace WpfApplication1
             // Handle mouse up here by fitting a line to the current point set 
         }
 
+        private void paintSurface_StylusMove(object sender, StylusEventArgs e)
+        {
+            double x = e.GetPosition(this).X;
+            double y = e.GetPosition(this).Y;
+        }
+
+        private void paintSurface_StylusDown(object sender, StylusDownEventArgs e)
+        {
+            double x = e.GetPosition(this).X;
+            double y = e.GetPosition(this).Y;
+            Debug.WriteLine("Mouse down at: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
+        }
     }
 
 

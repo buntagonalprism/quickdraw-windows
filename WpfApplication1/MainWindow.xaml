@@ -2,9 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
-    <Canvas  Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1"  >
-        <Canvas.Background>
+    <InkCanvas  Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1" StylusDown="paintSurface_StylusDown" StylusMove="paintSurface_StylusMove" >
+        <InkCanvas.Background>
             <SolidColorBrush Color="White" Opacity="0"/>
-        </Canvas.Background>
-    </Canvas>
+        </InkCanvas.Background>
+    </InkCanvas>
 </Window>
