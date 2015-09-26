@@ -25,27 +25,44 @@ namespace WpfApplication1
     {
 
         Point currentPoint = new Point();
-        List<QDInputPointSet> ptSets = new List<QDInputPointSet>(); 
+        List<QDInputPointSet> ptSets = new List<QDInputPointSet>();
+        bool isMouseDown = false;
 
         public MainWindow()
         {
             InitializeComponent();
+            paintSurface.AddHandler(InkCanvas.MouseDownEvent, new MouseButtonEventHandler(Canvas_MouseDown_1), true);
+            paintSurface.AddHandler(InkCanvas.MouseUpEvent, new MouseButtonEventHandler(Canvas_MouseUp_1), true);
+        }
+
+        private void MyMouseDown(Point pt)
+        {
+            isMouseDown = true;
+            currentPoint = pt;
+            ptSets.Add(new QDInputPointSet());
         }
 
         private void Canvas_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Mouse down at: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
-            if (e.ButtonState == MouseButtonState.Pressed)
+           
+            if (e.ButtonState == MouseButtonState.Pressed && !isMouseDown)
             {
-                currentPoint = e.GetPosition(this);
-                ptSets.Add(new QDInputPointSet());
+                Debug.WriteLine("Mouse down from mouse down event: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
+                MyMouseDown(e.GetPosition(this));
             }
         }
 
         private void Canvas_MouseMove_1(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            
+            if (e.LeftButton == MouseButtonState.Pressed && !isMouseDown)
             {
+                Debug.WriteLine("Mouse down from mouse move event: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
+                MyMouseDown(e.GetPosition(this));
+            }
+            else if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Debug.WriteLine("MouseMove");
                 Line line = new Line();
 
                 line.Stroke = SystemColors.WindowFrameBrush;
@@ -56,7 +73,7 @@ namespace WpfApplication1
 
                 currentPoint = e.GetPosition(this);
      
-                paintSurface.Children.Add(line);
+                //paintSurface.Children.Add(line);
 
                 //if (ptSets.Last().addPoint(new QDPoint((float)line.X1, (float)line.X2)))
                 //{
@@ -73,6 +90,8 @@ namespace WpfApplication1
         private void Canvas_MouseUp_1(object sender, System.Windows.Input.MouseEventArgs e)
         {
             // Handle mouse up here by fitting a line to the current point set 
+            Debug.WriteLine("Mouse Up");
+            isMouseDown = false;
         }
 
         private void paintSurface_StylusMove(object sender, StylusEventArgs e)
@@ -83,9 +102,11 @@ namespace WpfApplication1
 
         private void paintSurface_StylusDown(object sender, StylusDownEventArgs e)
         {
-            double x = e.GetPosition(this).X;
-            double y = e.GetPosition(this).Y;
-            Debug.WriteLine("Mouse down at: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
+            if (!isMouseDown)
+            {
+                Debug.WriteLine("Mouse down from stylus down event: " + e.GetPosition(this).X + ", " + e.GetPosition(this).Y);
+                MyMouseDown(e.GetPosition(this));
+            }
         }
     }
 
