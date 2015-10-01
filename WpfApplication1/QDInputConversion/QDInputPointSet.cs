@@ -101,7 +101,7 @@ namespace WpfApplication1.QDInputConversion
 
 
             // Step 1: track back to get testPt
-            float TEST_RADIUS = 20.0f;
+            float TEST_RADIUS = 50.0f;
             float CNR_RADIUS = 10.0f;
             QDPoint testPt = null, cnrCandidatePt = null, currPt = pt;
             int midIdx = -1, testIdx = -1, cnrCandidateIdx = -1;

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Windows;
 
 
 namespace WpfApplication1.QDShapes
@@ -20,6 +23,8 @@ namespace WpfApplication1.QDShapes
         public float angleD = 181.0f;
         public float angleR = 1.0f+(float)Math.PI;
         public float length = -1.0f;
+
+        private Path path = new Path();
 
 
         private float toDegrees(float rad)
@@ -92,13 +97,32 @@ namespace WpfApplication1.QDShapes
             return midQDPoint;
         }
 
-        //public Path getPath() {
-        //    if (path.isEmpty()) {
-        //        path.moveTo(start.x, start.y);
-        //        path.QDLineTo(finish.x,finish.y);
-        //    }
-        //    return path;
-        //}
+        public Path getPath() {
+            if (path.Data == null) {
+                PathFigure myPathFigure = new PathFigure();
+                myPathFigure.StartPoint = new Point(start.x, start.y);
+
+                LineSegment myLineSegment = new LineSegment();
+                myLineSegment.Point = new Point(finish.x, finish.y);
+
+                PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
+                myPathSegmentCollection.Add(myLineSegment);
+
+                myPathFigure.Segments = myPathSegmentCollection;
+
+                PathFigureCollection myPathFigureCollection = new PathFigureCollection();
+                myPathFigureCollection.Add(myPathFigure);
+
+                PathGeometry myPathGeometry = new PathGeometry();
+                myPathGeometry.Figures = myPathFigureCollection;
+               
+                path.Stroke = Brushes.Black;
+                path.StrokeThickness = 1;
+                path.Data = myPathGeometry;
+               
+            }
+            return path;
+        }
 
         //public Path getPath(QDPoint windowOrigin, float scaleFactor) {
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfApplication1.QDShapes;
 using WpfApplication1.QDUtils;
+using System.Windows.Media;
 
 namespace WpfApplication1.QDInputConversion
 {
@@ -50,13 +51,13 @@ namespace WpfApplication1.QDInputConversion
                 pointSet.shapeType = QDShapeTypes.ELLIPSE;
                 // TODO: change the constraint type
                 pointSet.constraints.Add(QDConstraintTypes.CIRCLE);
-                bool ccwDirection = getDirection(pointSet);
+                SweepDirection direction = getDirection(pointSet);
                 float sweptAngle = findSweptArc(pointSet, (QDEllipse) pointSet.initialFit);
                 if (sweptAngle < 330f) {
-                    float startAngle = findArcStartD(ccwDirection, pointSet, (QDEllipse)pointSet.initialFit);
-                    float finishAngle = findArcEndD(ccwDirection, pointSet, (QDEllipse)pointSet.initialFit);
+                    float startAngle = findArcStartD(direction, pointSet, (QDEllipse)pointSet.initialFit);
+                    float finishAngle = findArcEndD(direction, pointSet, (QDEllipse)pointSet.initialFit);
                     pointSet.shapeType = QDShapeTypes.ELLIPTICAL_ARC;
-                    pointSet.initialFit = pointSet.fittedShape = new QDEllipticalArc((QDEllipse)pointSet.initialFit, ccwDirection, startAngle, finishAngle);
+                    pointSet.initialFit = pointSet.fittedShape = new QDEllipticalArc((QDEllipse)pointSet.initialFit, direction, startAngle, finishAngle);
                 }
             }
 
@@ -86,10 +87,11 @@ namespace WpfApplication1.QDInputConversion
              * Finds the final angle of an elliptical arc given its direction, searching points near
              * the last drawn point in case of small backtracks
              */
-            private float findArcStartD(bool ccwDirection, QDInputPointSet ptSet, QDEllipse ellipse)
+            private float findArcStartD(SweepDirection direction, QDInputPointSet ptSet, QDEllipse ellipse)
             {
+            
                 float startAngle = QDUtils.QDUtils.getPtToPtAngleD(ellipse.mCentre, ptSet.pts[0]);
-                if (!ccwDirection)
+                if (direction == SweepDirection.Clockwise)
                 {
                     // Check for any points near the first point more CCW than the current to set as start
                     for (int i = 1; i < Math.Ceiling(ptSet.pts.Count * 0.25f); i++)
@@ -101,7 +103,7 @@ namespace WpfApplication1.QDInputConversion
                         }
                     }
                 }
-                else
+                else if (direction == SweepDirection.Counterclockwise)
                 { // CCW arc
                     for (int i = 1; i < Math.Ceiling(ptSet.pts.Count * 0.25f); i++)
                     {
@@ -119,10 +121,10 @@ namespace WpfApplication1.QDInputConversion
              * Finds the beginning angle of an elliptical arc given its direction, searching points near
              * the first drawn point in case of small backtracks
              */
-            private float findArcEndD(bool ccwDirection, QDInputPointSet ptSet, QDEllipse ellipse)
+            private float findArcEndD(SweepDirection direction, QDInputPointSet ptSet, QDEllipse ellipse)
             {
                 float finishAngle = QDUtils.QDUtils.getPtToPtAngleD(ellipse.mCentre, ptSet.pts.Last());
-                if (!ccwDirection)
+                if (direction == SweepDirection.Clockwise)
                 {
                     // Check for any points near the first point more CCW than the current to set as start
                     for (int i = ptSet.pts.Count - 2; i < Math.Floor(ptSet.pts.Count * 0.75f); i--)
@@ -134,7 +136,7 @@ namespace WpfApplication1.QDInputConversion
                         }
                     }
                 }
-                else
+                else if (direction == SweepDirection.Counterclockwise)
                 { // CCW arc
                     for (int i = ptSet.pts.Count - 2; i < Math.Floor(ptSet.pts.Count * 0.75f); i--)
                     {
@@ -151,7 +153,7 @@ namespace WpfApplication1.QDInputConversion
             /**
              * Evaluates the direction of an arc as being either CW or CCW
              */
-            private bool getDirection(QDInputPointSet pointSet)
+            private SweepDirection getDirection(QDInputPointSet pointSet)
             {
 
                 float angleDiffSum = 0f;
@@ -164,12 +166,12 @@ namespace WpfApplication1.QDInputConversion
                             angleDiffSum += diff;
                     }
                     if (angleDiffSum > 0)
-                        return true;
+                        return SweepDirection.Counterclockwise;
                     else
-                        return false;
+                        return SweepDirection.Clockwise;
                 }
                 else
-                    return false;
+                    return SweepDirection.Clockwise;
             }
 
 
