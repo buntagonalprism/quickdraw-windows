@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WpfApplication1.QDUtils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Shapes;
 
 namespace WpfApplication1.QDShapes
 {
@@ -93,14 +94,15 @@ namespace WpfApplication1.QDShapes
         }
 
         // Return the QDEllipse transformed by its position and rotation
-        //@Override
-        //public Path getPath() {
-        //    if (path.isEmpty()) {
-        //        path.addOval(mBoundBox, Path.Direction.CCW);
-        //        path.transform(mRotMat);
-        //    }
-        //    return path;
-        //}
+        public override Path getPath()
+        {
+            if (path.Data == null)
+            {
+                //path.addOval(mBoundBox, Path.Direction.CCW);
+                //path.transform(mRotMat);
+            }
+            return path;
+        }
 
         // Use the scalefactor to scale the bounding box, and windowOriging to translate the QDEllipse
         //@Override

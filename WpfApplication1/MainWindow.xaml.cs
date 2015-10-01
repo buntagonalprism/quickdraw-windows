@@ -176,7 +176,7 @@ namespace WpfApplication1
                 //QDLine line = (QDLine) pointSet.fittedShape;
                 //float x = line.start.x;
                 //paintSurface.Children.Add(line.getPath());
-                paintSurface.Children.Add(((QDEllipticalArc)pointSet.fittedShape).getPath());
+                paintSurface.Children.Add(pointSet.fittedShape.getPath());
                 //independent.analyse(pointSet);
                 //spatial.analyse(pointSet);
                 //pointSet.fittedShape.paint = new Paint(current_paint);

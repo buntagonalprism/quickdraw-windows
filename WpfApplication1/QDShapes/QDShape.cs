@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace WpfApplication1.QDShapes
 {
     public abstract class QDShape
     {
-        public abstract List<SampledQDPoint> getIntermediatePoints(float spacing);
+        public Path path = new Path();
 
-        //public abstract Path getPath();
+        public abstract List<SampledQDPoint> getIntermediatePoints(float spacing);
+        
+
+        public abstract Path getPath();
 
         //public abstract Path getPath(Point windowOrigin, float scaleFactor);
 

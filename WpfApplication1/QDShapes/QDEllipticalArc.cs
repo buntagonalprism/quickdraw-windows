@@ -16,7 +16,6 @@ namespace WpfApplication1.QDShapes
         //public Path.Direction mDir;
         SweepDirection direction = SweepDirection.Clockwise;
         public float mStartAngleD, mFinishAngleD;
-        public Path path = new Path();
 
         // Empty default constructor
         public QDEllipticalArc() {}
@@ -62,7 +61,7 @@ namespace WpfApplication1.QDShapes
 
 
         //@Override
-        public Path getPath() {
+        public override Path getPath() {
             if (path.Data == null)
             {
                 PathFigure myPathFigure = new PathFigure();

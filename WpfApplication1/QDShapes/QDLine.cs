@@ -24,8 +24,6 @@ namespace WpfApplication1.QDShapes
         public float angleR = 1.0f+(float)Math.PI;
         public float length = -1.0f;
 
-        private Path path = new Path();
-
 
         private float toDegrees(float rad)
         {
@@ -97,7 +95,7 @@ namespace WpfApplication1.QDShapes
             return midQDPoint;
         }
 
-        public Path getPath() {
+        public override Path getPath() {
             if (path.Data == null) {
                 PathFigure myPathFigure = new PathFigure();
                 myPathFigure.StartPoint = new Point(start.x, start.y);
