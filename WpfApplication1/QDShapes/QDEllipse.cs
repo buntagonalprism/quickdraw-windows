@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 
 namespace WpfApplication1.QDShapes
 {
-    class QDEllipse : QDShape
+    public class QDEllipse : QDShape
     {
         
         public QDPoint mFoci1;

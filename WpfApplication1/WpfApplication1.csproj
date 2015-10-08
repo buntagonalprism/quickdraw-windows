@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="QDInputConversion\QDConstraints.cs" />
     <Compile Include="QDInputConversion\QDInputPointSet.cs" />
     <Compile Include="QDInputConversion\QDShapeFitting.cs" />
     <Compile Include="QDShapes\QDArc.cs" />

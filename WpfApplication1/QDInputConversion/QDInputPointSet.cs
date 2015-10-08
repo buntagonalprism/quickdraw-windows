@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace WpfApplication1.QDInputConversion
 {
-    class QDInputPointSet
+    public class QDInputPointSet
     {
         public List<QDConstraintTypes> constraints = new List<QDConstraintTypes>();
         public QDShape initialFit = null;

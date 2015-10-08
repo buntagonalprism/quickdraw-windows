@@ -11,7 +11,7 @@ using WpfApplication1.QDUtils;
 
 namespace WpfApplication1.QDShapes
 {
-    class QDEllipticalArc : QDEllipse
+    public class QDEllipticalArc : QDEllipse
     {
         //public Path.Direction mDir;
         SweepDirection direction = SweepDirection.Clockwise;

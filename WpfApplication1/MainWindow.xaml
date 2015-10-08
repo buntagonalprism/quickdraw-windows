@@ -2,9 +2,25 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
-    <InkCanvas  Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1" StylusDown="paintSurface_StylusDown" StylusMove="paintSurface_StylusMove" >
-        <InkCanvas.Background>
-            <SolidColorBrush Color="White" Opacity="0"/>
-        </InkCanvas.Background>
-    </InkCanvas>
+    <DockPanel LastChildFill="True">
+        <Menu x:Name="menu" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New" Click="handleMenuNew"/>
+                <Separator />
+                <MenuItem Header="Save" Click="handleMenuSave"/>
+                <Separator />
+                <MenuItem Header="Open" Click="handleMenuOpen"/>
+            </MenuItem>
+            <MenuItem Header="Debug">
+                <MenuItem Header="Output points" Click="handleMenuDebugPtsOutput"/>
+                <MenuItem Header="Change debug output location" Click="handleMenuDebugOutputChangeLocation"/>
+            </MenuItem>
+        </Menu>
+        <InkCanvas  Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1" StylusDown="paintSurface_StylusDown" StylusMove="paintSurface_StylusMove" >
+            <InkCanvas.Background>
+                <SolidColorBrush Color="White" Opacity="0"/>
+            </InkCanvas.Background>
+        
+        </InkCanvas>
+    </DockPanel>
 </Window>

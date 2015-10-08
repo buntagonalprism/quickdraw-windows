@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace WpfApplication1.QDShapes
 {
+    [XmlInclude(typeof(QDEllipticalArc))]
+    [XmlInclude(typeof(QDLine))]
     public abstract class QDShape
     {
+        [XmlIgnoreAttribute]
         public Path path = new Path();
 
         public abstract List<SampledQDPoint> getIntermediatePoints(float spacing);
