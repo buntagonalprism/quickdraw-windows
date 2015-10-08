@@ -65,7 +65,9 @@
     <Compile Include="QDShapes\QDLine.cs" />
     <Compile Include="QDShapes\QDPoint.cs" />
     <Compile Include="QDShapes\QDShape.cs" />
-    <Compile Include="QDShapes\SampledQDPoint.cs" />
+    <Compile Include="QDShapes\QDShapeDatabase.cs" />
+    <Compile Include="QDShapes\QuadTree.cs" />
+    <Compile Include="QDShapes\QDShapeDBPoint.cs" />
     <Compile Include="QDUtils\QDConstraintTypes.cs" />
     <Compile Include="QDUtils\QDPointTypes.cs" />
     <Compile Include="QDUtils\QDShapeTypes.cs" />

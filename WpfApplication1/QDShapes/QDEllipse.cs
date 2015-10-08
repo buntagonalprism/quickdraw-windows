@@ -79,15 +79,15 @@ namespace WpfApplication1.QDShapes
         // Create intermediate points by sweeping around a standard elliptical shape then manually
         // applying the rotation and translation to the point.
 
-        public override List<SampledQDPoint> getIntermediatePoints(float spacing) {
-            List<SampledQDPoint> pts = new List<SampledQDPoint>();
+        public override List<QDShapeDBPoint> getIntermediatePoints(float spacing) {
+            List<QDShapeDBPoint> pts = new List<QDShapeDBPoint>();
 
             for (float t = 0f; t < 2*Math.PI; t = t + 0.05f) {
                 QDPoint parametric = new QDPoint(mSemiX * (float) Math.Cos(t), mSemiY * (float) Math.Sin(t));
                 QDPoint rotatedPoint = new QDPoint((float) Math.Cos(mAngleR)*parametric.x - (float) Math.Sin(mAngleR)*parametric.y,
                         (float) Math.Sin(mAngleR)*parametric.x + (float) Math.Cos(mAngleR) * parametric.y);
                 QDPoint translatedPoint = new QDPoint(rotatedPoint.x + mCentre.x, rotatedPoint.y + mCentre.y);
-                SampledQDPoint sampled = new SampledQDPoint(translatedPoint, QDPointTypes.CIRCLE_CIRCUMFERENCE);
+                QDShapeDBPoint sampled = new QDShapeDBPoint(translatedPoint, QDPointTypes.CIRCLE_CIRCUMFERENCE);
                 pts.Add(sampled);
             }
             return pts;

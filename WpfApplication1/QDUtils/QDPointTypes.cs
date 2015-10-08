@@ -8,7 +8,8 @@ namespace WpfApplication1.QDUtils
 {
     public enum QDPointTypes
     {
-        LINE_ENDPOINT,
+        LINE_START,
+        LINE_FINISH,
         LINE_MIDPOINT,
         LINE_INTERMEDIATE,
         CIRCLE_CENTRE,

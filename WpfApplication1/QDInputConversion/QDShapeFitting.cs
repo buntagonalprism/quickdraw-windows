@@ -239,7 +239,7 @@ namespace WpfApplication1.QDInputConversion
                         line.finish.x = (line.finish.y - line.intercept) / gradient;
                     }
                 }
-                return line;
+                return new QDLine(line.start, line.finish);
             }
 
             public QDEllipse ellipseFit(List<QDPoint> pts)

@@ -7,15 +7,16 @@ using WpfApplication1.QDUtils;
 
 namespace WpfApplication1.QDShapes
 {
-    public class SampledQDPoint : QDPoint
+    public class QDShapeDBPoint : QDPoint
     {
         public QDPointTypes type;
+        public QDShape shape = null;
 
-        public SampledQDPoint(SampledQDPoint other) :base(other) {
+        public QDShapeDBPoint(QDShapeDBPoint other) :base(other) {
             type = other.type;
         }
 
-        public SampledQDPoint(QDPoint pt, QDPointTypes type_in)  : base(pt)
+        public QDShapeDBPoint(QDPoint pt, QDPointTypes type_in)  : base(pt)
         {
             type = type_in;
         }

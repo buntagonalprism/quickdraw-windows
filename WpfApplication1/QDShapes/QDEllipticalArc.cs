@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WpfApplication1.QDUtils;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows;
@@ -33,8 +32,8 @@ namespace WpfApplication1.QDShapes
         // Create intermediate QDPoints by sweeping around a standard elliptical arc shape then manually
         // applying the rotation and translation to the QDPoint.
         //@Override
-        public override List<SampledQDPoint> getIntermediatePoints(float spacing) {
-            List<SampledQDPoint> pts = new List<SampledQDPoint>();
+        public override List<QDShapeDBPoint> getIntermediatePoints(float spacing) {
+            List<QDShapeDBPoint> pts = new List<QDShapeDBPoint>();
             // Get angle required to achieve desired QDPoint spacing at major axis extreme
             float angleStep = 2f * (float) Math.Atan(0.5f * spacing / mSemiX);
 
@@ -53,7 +52,7 @@ namespace WpfApplication1.QDShapes
                 QDPoint rotatedPoint = new QDPoint((float) Math.Cos(mAngleR)*parametric.x - (float) Math.Sin(mAngleR)*parametric.y,
                         (float) Math.Sin(mAngleR)*parametric.x + (float) Math.Cos(mAngleR) * parametric.y);
                 QDPoint translatedPoint = new QDPoint(rotatedPoint.x + mCentre.x, rotatedPoint.y + mCentre.y);
-                SampledQDPoint sampled = new SampledQDPoint(translatedPoint, QDPointTypes.CIRCLE_CIRCUMFERENCE);
+                QDShapeDBPoint sampled = new QDShapeDBPoint(translatedPoint, QDPointTypes.CIRCLE_CIRCUMFERENCE);
                 pts.Add(sampled);
             }
             return pts;

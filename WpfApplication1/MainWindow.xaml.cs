@@ -31,6 +31,9 @@ namespace WpfApplication1
         public Point currentPoint = new Point();
         public Point firstPoint = new Point();
         public List<QDInputPointSet> ptSets = new List<QDInputPointSet>();
+        public QDShapeDatabase shapeDB = new QDShapeDatabase();
+        public QDConstraints constraints;
+
         public bool isMouseDown = false;
         
 
@@ -39,6 +42,7 @@ namespace WpfApplication1
             InitializeComponent();
             paintSurface.AddHandler(InkCanvas.MouseDownEvent, new MouseButtonEventHandler(Canvas_MouseDown_1), true);
             paintSurface.AddHandler(InkCanvas.MouseUpEvent, new MouseButtonEventHandler(Canvas_MouseUp_1), true);
+            constraints = new QDConstraints(shapeDB);
         }
 
         private void MyMouseDown(Point pt)
@@ -181,7 +185,20 @@ namespace WpfApplication1
                 //QDLine line = (QDLine) pointSet.fittedShape;
                 //float x = line.start.x;
                 //paintSurface.Children.Add(line.getPath());
-                paintSurface.Children.Add(pointSet.fittedShape.getPath());
+                
+                constraints.analyse(pointSet);
+                shapeDB.addInputPointSet(pointSet);
+
+                // SERIOUS HACKERY
+                paintSurface.Children.Clear();
+                foreach (QDInputPointSet ptSet in shapeDB.getPtSets())
+                {
+                    ptSet.fittedShape.path = new System.Windows.Shapes.Path(); // this wipes the old one in case we changed it in constraints
+                    paintSurface.Children.Add(ptSet.fittedShape.getPath());
+                }
+                
+                
+
                 //independent.analyse(pointSet);
                 //spatial.analyse(pointSet);
                 //pointSet.fittedShape.paint = new Paint(current_paint);
@@ -199,6 +216,7 @@ namespace WpfApplication1
         {
             Debug.WriteLine("File new selected");
             ptSets.Clear();
+            shapeDB.reset();
             paintSurface.Children.Clear();
         }
 

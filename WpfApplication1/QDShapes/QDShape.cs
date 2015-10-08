@@ -15,7 +15,7 @@ namespace WpfApplication1.QDShapes
         [XmlIgnoreAttribute]
         public Path path = new Path();
 
-        public abstract List<SampledQDPoint> getIntermediatePoints(float spacing);
+        public abstract List<QDShapeDBPoint> getIntermediatePoints(float spacing);
         
 
         public abstract Path getPath();

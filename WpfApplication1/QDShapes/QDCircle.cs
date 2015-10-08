@@ -24,16 +24,16 @@ namespace WpfApplication1.QDShapes
         }
 
         //@Override
-        public List<SampledQDPoint> getIntermediatePoints(float spacing) {
-            List<SampledQDPoint> intermediatePoints = new List<SampledQDPoint>();
-            intermediatePoints.Add(new SampledQDPoint(centre, QDPointTypes.CIRCLE_CENTRE));
+        public List<QDShapeDBPoint> getIntermediatePoints(float spacing) {
+            List<QDShapeDBPoint> intermediatePoints = new List<QDShapeDBPoint>();
+            intermediatePoints.Add(new QDShapeDBPoint(centre, QDPointTypes.CIRCLE_CENTRE));
             if (radius > spacing) {
                 float angleR = 2.0f * (float) Math.Sin((spacing/2.0f)/radius);
                 int numPts = (int) Math.Ceiling(2.0f * Math.PI / angleR);
                 float betweenPts = 2.0f * (float) Math.PI  / numPts;
                 for (int i = 1; i < numPts ; i++) {
                     QDPoint pt = new QDPoint(centre.x + (float) Math.Cos(-180.0f + i*betweenPts)*radius, centre.y + (float) Math.Sin(-180.0f + i*betweenPts)*radius);
-                    intermediatePoints.Add(new SampledQDPoint(pt, QDPointTypes.CIRCLE_CIRCUMFERENCE));
+                    intermediatePoints.Add(new QDShapeDBPoint(pt, QDPointTypes.CIRCLE_CIRCUMFERENCE));
                 }
             }
             return intermediatePoints;

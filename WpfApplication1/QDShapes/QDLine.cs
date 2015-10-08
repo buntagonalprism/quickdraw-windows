@@ -15,7 +15,7 @@ namespace WpfApplication1.QDShapes
     {
         public QDPoint start = new QDPoint();
         public QDPoint finish = new QDPoint();
-        public QDPoint midQDPoint = null;
+        public QDPoint midPoint = null;
         public Boolean vertical = false;
         public float intercept;
         // TODO storing both is probably bad practice, radians is better computationally, but degrees
@@ -52,16 +52,16 @@ namespace WpfApplication1.QDShapes
         }
 
         //@Override
-        public override List<SampledQDPoint> getIntermediatePoints(float spacing) {
-            List<SampledQDPoint> intermediateQDPoints = new List<SampledQDPoint>();
-            intermediateQDPoints.Add(new SampledQDPoint(start, QDPointTypes.LINE_ENDPOINT));
-            intermediateQDPoints.Add(new SampledQDPoint(finish, QDPointTypes.LINE_ENDPOINT));
+        public override List<QDShapeDBPoint> getIntermediatePoints(float spacing) {
+            List<QDShapeDBPoint> intermediateQDPoints = new List<QDShapeDBPoint>();
+            intermediateQDPoints.Add(new QDShapeDBPoint(start, QDPointTypes.LINE_START));
+            intermediateQDPoints.Add(new QDShapeDBPoint(finish, QDPointTypes.LINE_FINISH));
             if (getLength() > spacing) {
                 int numPts = (int) Math.Ceiling(getLength() / spacing);
                 float betweenPts = getLength() / numPts;
                 for (int i = 1; i < numPts ; i++) {
                     QDPoint pt = new QDPoint(start.x + (float) Math.Cos(angleR)*i*betweenPts, start.y + (float) Math.Sin(angleR)*i*betweenPts);
-                    intermediateQDPoints.Add(new SampledQDPoint(pt, QDPointTypes.LINE_INTERMEDIATE));
+                    intermediateQDPoints.Add(new QDShapeDBPoint(pt, QDPointTypes.LINE_INTERMEDIATE));
                 }
             }
             return intermediateQDPoints;
@@ -90,9 +90,9 @@ namespace WpfApplication1.QDShapes
         }
 
         public QDPoint getMidpoint() {
-            if (midQDPoint == null)
-                midQDPoint = new QDPoint((start.x + finish.x)/2.0f, (start.y + finish.y)/2.0f);
-            return midQDPoint;
+            if (midPoint == null)
+                midPoint = new QDPoint((start.x + finish.x)/2.0f, (start.y + finish.y)/2.0f);
+            return midPoint;
         }
 
         public override Path getPath() {
