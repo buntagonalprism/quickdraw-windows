@@ -19,10 +19,13 @@ namespace WpfApplication1.QDInputConversion
             shapeDB = shapeDB_in;
         }
 
-        public void analyse(QDInputPointSet ptSet)
+        // Returns the list of other shapes modified which need redrawing
+        public List<QDShape> analyse(QDInputPointSet ptSet)
         {
+            List<QDShape> modifiedShapes = new List<QDShape>();
             getIntrinsicConstraints(ptSet);
-            getExtrinsicConstraints(ptSet);
+            modifiedShapes = getExtrinsicConstraints(ptSet);
+            return modifiedShapes;
         }
 
         public void getRelatedShapes()
@@ -78,8 +81,9 @@ namespace WpfApplication1.QDInputConversion
                 }
             }
         }
-        public void getExtrinsicConstraints(QDInputPointSet ptSet)
+        public List<QDShape> getExtrinsicConstraints(QDInputPointSet ptSet)
         {
+            List<QDShape> modifiedShapes = new List<QDShape>();
             if (ptSet.shapeType == QDShapeTypes.LINE) { 
 
                 QDLine line = (QDLine)ptSet.fittedShape;
@@ -89,6 +93,10 @@ namespace WpfApplication1.QDInputConversion
                     if (pt.type == QDPointTypes.LINE_START || pt.type == QDPointTypes.LINE_FINISH)
                     {
                         QDLine nearLine = (QDLine)pt.shape;
+
+                        if (!modifiedShapes.Contains(nearLine))
+                            modifiedShapes.Add(nearLine);
+
                         QDInfiniteLine thisInf = new QDInfiniteLine(line.start, line.finish);
                         QDInfiniteLine nearInf = new QDInfiniteLine(nearLine.start, nearLine.finish);
                         // Check for nearly parallel lines
@@ -116,6 +124,10 @@ namespace WpfApplication1.QDInputConversion
                     if (pt.type == QDPointTypes.LINE_START || pt.type == QDPointTypes.LINE_FINISH)
                     {
                         QDLine nearLine = (QDLine)pt.shape;
+
+                        if (!modifiedShapes.Contains(nearLine))
+                            modifiedShapes.Add(nearLine);
+
                         QDInfiniteLine thisInf = new QDInfiniteLine(line.start, line.finish);
                         QDInfiniteLine nearInf = new QDInfiniteLine(nearLine.start, nearLine.finish);
                         // Check for nearly parallel lines
@@ -134,7 +146,10 @@ namespace WpfApplication1.QDInputConversion
 
                     }
                 }
+
+                
             }
+            return modifiedShapes;
         }
 
         

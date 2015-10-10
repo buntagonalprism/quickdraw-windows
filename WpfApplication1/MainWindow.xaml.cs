@@ -226,16 +226,25 @@ namespace WpfApplication1
             //pointSet = scaleToAbs(pointSet);
             if (shapeFitted)
             {              
-                constraints.analyse(pointSet);
+                List<QDShape> modifiedShapes = constraints.analyse(pointSet);
                 shapeDB.addInputPointSet(pointSet);
+                foreach (QDShape shape in modifiedShapes)
+                {
+                    paintSurface.Children.Remove(shape.path);
+                }
+                foreach (QDShape shape in modifiedShapes)
+                {
+                    paintSurface.Children.Add(shape.getPath());
+                }
+                paintSurface.Children.Add(pointSet.fittedShape.getPath());
 
                 // SERIOUS HACKERY
                 //paintSurface.Children.Clear();
-                foreach (QDInputPointSet ptSet in shapeDB.getPtSets())
-                {
-                    ptSet.fittedShape.path = new System.Windows.Shapes.Path(); // this wipes the old one in case we changed it in constraints
-                    paintSurface.Children.Add(ptSet.fittedShape.getPath());
-                }
+                //foreach (QDInputPointSet ptSet in shapeDB.getPtSets())
+                //{
+                //    ptSet.fittedShape.path = new System.Windows.Shapes.Path(); // this wipes the old one in case we changed it in constraints
+                //    paintSurface.Children.Add(ptSet.fittedShape.getPath());
+                //}
             }
         }
 
