@@ -150,7 +150,7 @@ namespace WpfApplication1.QDInputConversion
                 if (strTest2Idx < 0) return false;
                 float seg1 = new QDLine(pts[strTest2Idx], pts[strTestIdx]).angleD;
                 float seg2 = new QDLine(pts[strTestIdx], pts[testIdx]).angleD;
-                if (Math.Abs(QDUtils.QDUtils.angleDiffMinorD(seg1, seg2)) < 15.0f)
+                if (Math.Abs(QDUtils.QDUtils.angleDiffMinorD(seg1, seg2)) < 30.0f)
                     cornerTerminated = true;
                 else
                     cornerTerminated = false;

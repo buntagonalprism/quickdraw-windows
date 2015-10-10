@@ -127,7 +127,7 @@ namespace WpfApplication1.QDInputConversion
                 if (direction == SweepDirection.Clockwise)
                 {
                     // Check for any points near the first point more CCW than the current to set as start
-                    for (int i = ptSet.pts.Count - 2; i < Math.Floor(ptSet.pts.Count * 0.75f); i--)
+                    for (int i = ptSet.pts.Count - 2; i > Math.Floor(ptSet.pts.Count * 0.75f); i--)
                     {
                         float thisAngle = QDUtils.QDUtils.getPtToPtAngleD(ellipse.mCentre, ptSet.pts[i]);
                         if (QDUtils.QDUtils.angleDiffMinorD(finishAngle, thisAngle) < 0f)
@@ -138,7 +138,7 @@ namespace WpfApplication1.QDInputConversion
                 }
                 else if (direction == SweepDirection.Counterclockwise)
                 { // CCW arc
-                    for (int i = ptSet.pts.Count - 2; i < Math.Floor(ptSet.pts.Count * 0.75f); i--)
+                    for (int i = ptSet.pts.Count - 2; i > Math.Floor(ptSet.pts.Count * 0.75f); i--)
                     {
                         float thisAngle = QDUtils.QDUtils.getPtToPtAngleD(ellipse.mCentre, ptSet.pts[i]);
                         if (QDUtils.QDUtils.angleDiffMinorD(finishAngle, thisAngle) > 0f)

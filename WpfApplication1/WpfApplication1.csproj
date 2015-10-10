@@ -69,6 +69,8 @@
     <Compile Include="QDShapes\QuadTree.cs" />
     <Compile Include="QDShapes\QDShapeDBPoint.cs" />
     <Compile Include="QDUtils\QDConstraintTypes.cs" />
+    <Compile Include="QDUtils\QDDebugGraph.cs" />
+    <Compile Include="QDUtils\QDDebugUtils.cs" />
     <Compile Include="QDUtils\QDPointTypes.cs" />
     <Compile Include="QDUtils\QDShapeTypes.cs" />
     <Compile Include="QDUtils\QDUtils.cs" />

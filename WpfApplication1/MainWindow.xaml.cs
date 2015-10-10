@@ -14,11 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApplication1.QDInputConversion;
 using WpfApplication1.QDShapes;
+using WpfApplication1.QDUtils;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 using System.Xml.Serialization;
-
 
 namespace WpfApplication1
 {
@@ -33,6 +33,8 @@ namespace WpfApplication1
         public List<QDInputPointSet> ptSets = new List<QDInputPointSet>();
         public QDShapeDatabase shapeDB = new QDShapeDatabase();
         public QDConstraints constraints;
+        public Color debugPointsColourForSeg;
+        private QDDebugGraph graphTest;
 
         public bool isMouseDown = false;
         
@@ -43,6 +45,11 @@ namespace WpfApplication1
             paintSurface.AddHandler(InkCanvas.MouseDownEvent, new MouseButtonEventHandler(Canvas_MouseDown_1), true);
             paintSurface.AddHandler(InkCanvas.MouseUpEvent, new MouseButtonEventHandler(Canvas_MouseUp_1), true);
             constraints = new QDConstraints(shapeDB);
+            graphTest = new QDDebugGraph(paintSurface);
+            graphTest.setAxes(0, 50, 5, -180, 180, 30);
+            graphTest.setLocation(1200, 450, 450, 600);
+            graphTest.construct();
+            
         }
 
         private void MyMouseDown(Point pt)
@@ -52,6 +59,7 @@ namespace WpfApplication1
             ptSets.Add(new QDInputPointSet());
             ptSets.Last().addPoint(new QDPoint((float)pt.X, (float) pt.Y));
             firstPoint = pt;
+            debugPointsColourForSeg = getRandomColour();
         }
 
         private void Canvas_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -64,6 +72,33 @@ namespace WpfApplication1
             }
         }
 
+        private Color getRandomColour()
+        {
+            Random rand = new Random();
+            byte r = (byte)Math.Floor(255 * rand.NextDouble());
+            byte g = (byte)Math.Floor(255 * rand.NextDouble());
+            byte b = (byte)Math.Floor(255 * rand.NextDouble());
+            return Color.FromRgb(r, g, b);
+        }
+
+        public Ellipse drawDebugCircle(float x, float y, float radius, float strokeWidth, Color colour) {
+            Ellipse ellipse = new Ellipse();
+            ellipse.Height = radius;
+            ellipse.Width = radius;
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = colour;
+            ellipse.Stroke = brush;
+            ellipse.StrokeThickness = strokeWidth;
+            Matrix matrix = new Matrix();
+            matrix.Translate(x, y);
+            //ellipse.LayoutTransform = new MatrixTransform(matrix);
+            ellipse.RenderTransform = new MatrixTransform(matrix);
+            //EllipseGeometry ellipGeo = new EllipseGeometry();
+            //Transform transform = new Ge
+            return ellipse;
+            //paintSurface.Children.Add(ellipse);
+        }
+
         private void Canvas_MouseMove_1(object sender, System.Windows.Input.MouseEventArgs e)
         {
             
@@ -74,7 +109,11 @@ namespace WpfApplication1
             }
             else if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Debug.WriteLine("mouse move event: " + e.GetPosition(paintSurface).X + ", " + e.GetPosition(paintSurface).Y);
+                float x = (float) e.GetPosition(paintSurface).X;
+                float y = (float) e.GetPosition(paintSurface).Y;
+                Debug.WriteLine("mouse move event: " + x + ", " + y);
+
+                
 
                 //Line line = new Line();
                 //line.Stroke = SystemColors.WindowFrameBrush;
@@ -85,12 +124,21 @@ namespace WpfApplication1
                 //currentPoint = e.GetPosition(this);
                 //paintSurface.Children.Add(line);
 
-                if (ptSets.Last().addPoint(new QDPoint((float)e.GetPosition(paintSurface).X, (float)e.GetPosition(paintSurface).Y)))
+               
+                if (ptSets.Last().addPoint(new QDPoint(x,y)))
                 {
                     Debug.WriteLine("Corner found");
                     ptSets.Add(ptSets.Last().getCornerOverlapSet());
                     handleInputPointSet(ptSets[ptSets.Count - 2]);
+                    debugPointsColourForSeg = getRandomColour();
                     // Code to handle line fitting goes in here
+                }
+
+                // For debugging
+                paintSurface.Children.Add(QDDebugUtils.drawDebugCircle(x + 500f, y, 10, 2, debugPointsColourForSeg));
+                if (ptSets.Last().anglesD.Count > 0)
+                {
+                    graphTest.AddPoint(ptSets.Last().anglesD.Count, ptSets.Last().anglesD.Last(), debugPointsColourForSeg);
                 }
 
 
@@ -121,11 +169,7 @@ namespace WpfApplication1
             //line.Stroke = SystemColors.WindowFrameBrush;
             //paintSurface.Children.Add(line);
 
-            //Ellipse ellipse = new Ellipse();
-            //ellipse.Height = 100.0;
-            //ellipse.Width = 200.0f;
-            //ellipse.Stroke = SystemColors.WindowFrameBrush;
-            //paintSurface.Children.Add(ellipse);
+       
 
             //PathFigure myPathFigure = new PathFigure();
             //myPathFigure.StartPoint = new Point(20, 50);
@@ -181,35 +225,18 @@ namespace WpfApplication1
             
             //pointSet = scaleToAbs(pointSet);
             if (shapeFitted)
-            {
-                //QDLine line = (QDLine) pointSet.fittedShape;
-                //float x = line.start.x;
-                //paintSurface.Children.Add(line.getPath());
-                
+            {              
                 constraints.analyse(pointSet);
                 shapeDB.addInputPointSet(pointSet);
 
                 // SERIOUS HACKERY
-                paintSurface.Children.Clear();
+                //paintSurface.Children.Clear();
                 foreach (QDInputPointSet ptSet in shapeDB.getPtSets())
                 {
                     ptSet.fittedShape.path = new System.Windows.Shapes.Path(); // this wipes the old one in case we changed it in constraints
                     paintSurface.Children.Add(ptSet.fittedShape.getPath());
                 }
-                
-                
-
-                //independent.analyse(pointSet);
-                //spatial.analyse(pointSet);
-                //pointSet.fittedShape.paint = new Paint(current_paint);
             }
-            //shapeDB.addInputPointSet(pointSet);
-            //imageButtonAdapter.clear();
-            //imageButtonAdapter.addAll(mapConstraintsToImages(pointSet.constraints));
-            //invalidate();
-
-            //new FitShapeTask().execute(pointSet);
-
         }
 
         private void handleMenuNew(object sender, RoutedEventArgs e)
@@ -218,6 +245,7 @@ namespace WpfApplication1
             ptSets.Clear();
             shapeDB.reset();
             paintSurface.Children.Clear();
+            graphTest.redrawEmptyGraph();
         }
 
         private void handleMenuSave(object sender, RoutedEventArgs e)
@@ -301,7 +329,4 @@ namespace WpfApplication1
             }
         }
     }
-
-
-
 }
